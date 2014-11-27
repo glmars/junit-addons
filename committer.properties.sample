@@ -1,0 +1,13 @@
+# ----------------------------------------------------------------------------
+# Properties related to the user environment.  This file should be provided
+# for building Apricot or the properties need to be specified on the command
+# line when starting Ant with the -D switch or from a higher level build file.
+#
+# Version: $Id: committer.properties.sample,v 1.3 2003/05/22 02:25:18 vbossica Exp $
+# Author: Vladimir Bossicard (vbossica@users.sourceforge.net)
+# ----------------------------------------------------------------------------
+
+# The user's id on SourceForge.  This is only required to publish a new version
+# of the application, documentation or api on the website
+
+sourceforge.username = your_username

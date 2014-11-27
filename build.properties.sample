@@ -1,0 +1,33 @@
+# ----------------------------------------------------------------------------
+# Properties related to the user environment.  This file should be provided
+# for building JUnit-addons or the properties need to be specified on the
+# command line when starting Ant with the -D switch or from a higher level
+# build file.
+#
+# Version: $Revision: 1.8 $ $Date: 2003/04/27 02:14:33 $
+# Author: Vladimir R. Bossicard (vbossica@users.sourceforge.net)
+# ----------------------------------------------------------------------------
+
+# library available at <http://junit-addons.sf.net>
+junit-addons-runner.jar = lib/junit-addons-runner-1.0-alpha1.jar
+
+# library available at <http://www.jdom.org>
+jdom.jar = lib/jdom.jar
+
+# library available at <http://www.jaxen.org>
+jaxen.jar = lib/jaxen-full.jar
+
+# library available at <http://www.saxpath.org>
+saxpath.jar = lib/saxpath.jar
+
+# library available at <http://jakarta.apache.org/ant>
+ant.jar = lib/ant.jar
+
+# library available at <http://www.junit.org>
+junit.jar = lib/junit.jar
+
+# library available at <http://jakarta.apache.org/xerces>
+xerces.jar = lib/xercesImpl.jar:lib/xmlParserAPIs.jar
+
+# library available at <http://jakarta.apache.org/commons>
+commons-logging.jar = lib/commons-logging.jar

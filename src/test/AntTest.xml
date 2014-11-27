@@ -1,0 +1,33 @@
+
+<project name="AntTest" default="test">
+
+    <target name="init">
+        <ant antfile="build.xml" dir="../.." target="build" />
+    </target>
+
+    <property name="build.dest" value="classes" />
+    <property name="lib.dest" value="lib" />
+
+    <target name="test"
+            depends="init">
+        <taskdef name="testClassValidator" classname="junitx.tool.ant.TestClassValidatorTask">
+            <classpath>
+                <pathelement location="../../${build.dest}"/>
+            </classpath>
+        </taskdef>
+        <testClassValidator verbose="on" >
+            <classpath>
+                <pathelement location="../../${build.dest}" />
+                <fileset dir="../../${lib.dest}">
+                    <include name="**/*.jar"/>
+                    <include name="**/*.zip"/>
+                </fileset>
+            </classpath>
+            <fileset dir="../../${build.dest}">
+                <include name="**/*Suite.class"/>
+                <include name="**/*Test.class"/>
+            </fileset>
+        </testClassValidator>
+    </target>
+
+</project>

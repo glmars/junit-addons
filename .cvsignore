@@ -1,0 +1,11 @@
+build
+build.properties
+committer.properties
+contribution
+dist
+.classpath
+.project
+project.*
+doc
+jcoverage.ser
+build-local.properties

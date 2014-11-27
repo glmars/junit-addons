@@ -1,0 +1,94 @@
+<!--
+  - Version: $Revision: 1.14 $ $Date: 2003/05/04 20:35:57 $
+  - Author: Vladimir R. Bossicard (vbossica@users.sourceforge.net)
+  -->
+
+<body>
+<p>JUnit-addons is a collection of helper classes for <a href="http://www.junit.org">JUnit</a>.</p>
+
+<p>
+The best way to contribute to the project is to write your own additional classes.&nbsp; Use them for 
+some time and if you see that you can't live without them, then submit your code into the project's 
+<a target="_blank" href="http://sourceforge.net/tracker/?group_id=60272&atid=493633">patch section</a>.
+&nbsp; You can either submit a patch (<tt>cvs diff -u > mypatch.patch</tt>) or simply your source files.
+Alternatively you can request for a feature but you'll have to wait until someone decides to implement
+it.</p>
+
+<p>I hope you'll find this project useful,</a>
+
+<p>- Vladimir R. Bossicard (<a href="mailto:vbossica@users.sourceforge.net">vbossica@users.sourceforge.net</a>)</p>
+
+<h4>Main features</h4>
+
+<ul>
+<li>PropertyManager: if your tests need external properties (e.g. 
+username/password) this is the best way to organize them.
+<a href="junitx/util/PropertyManager.html" target="classFrame">(more)</a></li>
+
+<li>*SuiteBuilder: automatically extracts <tt>TestCase</tt> classes from a
+directory or a zip/jar archive</li>
+
+<li>TestSetup: like in a <tt>TestCase</tt> the <tt>tearDown</tt> method should
+(IMO) always be invoked
+<a href="junitx/extensions/TestSetup.html" target="classFrame">(more)</a></li>
+
+<li>assertEquals for strings: offers an alternative to the 'expected <......> 
+but was <... ...>' 
+<a href="junitx/framework/Assert.html#assertEquals(java.lang.String,%20java.lang.String)" target="classFrame">(more)</a></li>
+
+<li>ResourceManager: when the tests have to access resources that are 
+time-consuming to create this class is a real saver.  You loose the strict 
+independance of the tests, but it's not difficult to live with it
+<a href="junitx/util/ResourceManager.html" target="classFrame">(more)</a></li>
+
+<li>PrivateAccessor: I never had to use this class but it's interesting to see 
+how the accessibility of a field can be dynamically modified
+<a href="junitx/util/PrivateAccessor.html" target="classFrame">(more)</a></li>
+</ul>
+
+<h4>In the pipeline</h4>
+
+The different modules can be checked out from CVS.&nbsp; All code is alpha and no support is
+provided.&nbsp; If it works for you, fine; if it doesn't, you're out of luck.
+
+<ul>
+<li>new assert classes (ClassAssert, DOMAssert) as other utilities are placed in the 
+sandbox module before being added into the main module.</li>
+<li>some PMD rules to check the validity of JUnit tests. (module 'junit-addons-pmd')</li>
+<li>yet another runner, but this time with custom listeners, services and an easily embeddable
+test runner engine.&nbsp; It's like apricot, but for JUnit only. (module 'junit-addons-runner')</li>
+</ul>
+
+<h4>JUnit-addons resources</h4>
+
+<table width="100%">
+<tr><td>
+<ul>
+<li>Website: <a target="_blank" href="http://junit-addons.sourceforge.net">junit-addons.sourceforge.net</a></li>
+<li>Project page: <a target="_blank" href="http://sourceforge.net/projects/junit-addons">sourceforge.net/projects/junit-addons</a></li>
+<li>Latest version: <a target="_blank" href="http://sourceforge.net/project/showfiles.php?group_id=60272">sourceforge.net/project/showfiles.php?group_id=60272</a>
+</ul>
+</td>
+<td valign="top" align="right">
+<font size=-2>Hosted on <a href="http://sourceforge.net">SourceForge</a></font><p>
+<!-- SOURCEFORGE_LOGO -->
+</td></tr>
+</table>
+
+<h4>Articles about JUnit-addons</h4>
+<ul>
+<li><a href="http://www.devx.com/Java/Article/9614">JUnit and Its Extensions Make Unit Testing Your Java Code Much Easier</a> by Bryan Dollery, DevX, October 2002</li>
+<li><a href=" http://www.informit.com/content/index.asp?product_id=%7BD7A0F0C5-6AC8-43F5-BB4F-FFD15DEE796D%7D">The Best Java Open-Source Tools</a> by Bryan Dollery, informIT, November 2002</li>
+</ul>
+
+<h4>Contributors</h4>
+<ul>
+<li>Dean Chalker: FileAssert class</li>
+<li>Benoit Xhenseval</li>
+<li>Paul Holser</li>
+<li>Greg Vaughn</li>
+<li>Naidu Purushotham: *SuiteBuilder classes</li>
+<li>Dan Griffin: bug reports</li>
+</ul>
+
+</body>

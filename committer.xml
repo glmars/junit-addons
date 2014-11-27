@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+  - Build file for the junit-addons project.
+  -
+  - This script should be started with the following command line :
+  -
+  -     ant <target>
+  -
+  - Run "ant -projecthelp" to get a list of available targets.
+  -
+  - Version: $Revision: 1.12 $ $Date: 2003/05/21 02:18:13 $
+  - Author: Vladimir R. Bossicard (vbossica@users.sourceforge.net)
+  -->
+
+<project name="JUnit-addons Committer" default="generate" basedir=".">
+
+    <property file="committer.properties" />
+    <property file="common.properties" />
+
+    <!-- directories settings -->
+
+    <property name="src.dir" value="src" />
+
+    <property name="build.dest" value="build" />
+    <property name="api.dest" value="${build.dest}/api" />
+    <property name="website.dest" value="${build.dest}/website"/>
+    <property name="dist.dest" value="dist" />
+
+    <!-- miscellaneous settings -->
+
+    <property name="sourceforge.homepage" value="/home/groups/j/ju/junit-addons/htdocs" />
+
+    <!--
+      - Initializes the build and check if all libraries are available.
+      -->
+    <target name="init">
+        <tstamp />
+        <mkdir dir="${website.dest}" />
+    </target>
+
+    <target name="prepare"
+            depends="init">
+        <ant antfile="build.xml" target="release" />
+    </target>
+
+    <!--
+      - Copies the files into the website directory and modifies the index
+      - pages to incorporate the SourceForge logo.
+      -->
+    <target name="generate"
+            depends="prepare"
+            description="generate the documentation for on- and offline use">
+        <copy todir="${website.dest}">
+            <fileset dir="${api.dest}"/>
+        </copy>
+
+        <replace dir="${api.dest}">
+            <include name="overview-summary.html"/>
+            <replacetoken>&lt;!-- SOURCEFORGE_LOGO --></replacetoken>
+            <replacevalue>&lt;a href="http://sourceforge.net">&lt;img src="sflogo.png" width="88" height="31" border="0" alt="SourceForge Logo"/>&lt;/a></replacevalue>
+        </replace>
+
+        <replace dir="${website.dest}">
+            <include name="**/overview-summary.html"/>
+            <replacetoken>&lt;!-- SOURCEFORGE_LOGO --></replacetoken>
+            <replacevalue>&lt;a href="http://sourceforge.net">&lt;img src="http://sourceforge.net/sflogo.php?group_id=39433" width="88" height="31" border="0" alt="SourceForge Logo"/>&lt;/a></replacevalue>
+        </replace>
+
+        <copy file="${src.dir}/sflogo.png" todir="${api.dest}"/>
+    </target>
+
+    <target name="release"
+            depends="generate"
+            description="build a release (zip file)">
+        <delete quiet="true">
+            <fileset dir="${dist.dest}/" includes="${project.name}-${project.version}.zip" />
+        </delete>
+        <zip zipfile="${dist.dest}/${project.name}-${project.version}.zip" >
+            <zipfileset dir="." includes="LICENSE" prefix="${project.name}-${project.version}" />
+            <zipfileset dir="." includes="README" prefix="${project.name}-${project.version}" />
+            <zipfileset dir="." includes="WHATSNEW" prefix="${project.name}-${project.version}" />
+            <zipfileset dir="${dist.dest}" includes="src.jar" prefix="${project.name}-${project.version}" />
+            <zipfileset dir="${dist.dest}" includes="${project.name}-${project.version}.jar" prefix="${project.name}-${project.version}" />
+            <zipfileset dir="${api.dest}" prefix="${project.name}-${project.version}/api" />
+        </zip>
+    </target>
+
+    <target name="clean">
+        <delete dir="${website.dest}" />
+    </target>
+
+    <!--
+      - ###############################################################
+      - #### TASKS MEANT TO ONLY BE EXECUTED BY THE PROJECT MANAGER ###
+      - ###############################################################
+      -->
+
+    <!--
+      - Upload the release files into sourceforge's incoming folder
+      -->
+    <target name="upload"
+            depends="init"
+            description="[PROJECT MANAGER] upload the release on sourceforge's website">
+        <ftp server="upload.sourceforge.net"
+             remotedir="incoming"
+             userid="anonymous"
+             password="${sourceforge.username}@users.sourceforge.net">
+            <fileset dir="${dist.dest}/" includes="${project.name}-${project.version}.zip"/>
+        </ftp>
+    </target>
+
+    <!--
+      - Updates the website.
+      -->
+    <target name="website"
+            depends="init"
+            description="[PROJECT MANAGER] updates the website on SourceForge">
+        <tar tarfile="build/${project.name}-website-${DSTAMP}.tar" basedir="${website.dest}" />
+        <gzip zipfile="build/${project.name}-website-${DSTAMP}.tar.gz" src="build/${project.name}-website-${DSTAMP}.tar" />
+        <echo message="copying the documentation into the website" />
+        <exec dir="." executable="scp">
+            <arg line="build/${project.name}-website-${DSTAMP}.tar.gz ${sourceforge.username}@junit-addons.sourceforge.net:${sourceforge.homepage}/${project.name}-website-${DSTAMP}.tar.gz" />
+        </exec>
+        <echo message="expanding the documentation on the website" />
+        <exec dir="." executable="ssh">
+            <arg line="-l ${sourceforge.username} junit-addons.sourceforge.net 'cd ${sourceforge.homepage};rm *.html;rm *.css;rm -rf junitx;tar zxf ${project.name}-website-${DSTAMP}.tar.gz;rm ${project.name}-website-${DSTAMP}.tar.gz'" />
+        </exec>
+        <delete file="build/${project.name}-website-${DSTAMP}.tar" />
+        <delete file="build/${project.name}-website-${DSTAMP}.tar.gz" />
+    </target>
+
+</project>
