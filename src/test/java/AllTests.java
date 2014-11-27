@@ -26,7 +26,7 @@ public class AllTests {
                     && (classname.indexOf("SuiteBuilderTest") <= 0);
             }
         });
-        suite.addTest(builder.suite("build/classes-test"));
+        suite.addTest(builder.suite("target/test-classes"));
 
         return suite;
     }
