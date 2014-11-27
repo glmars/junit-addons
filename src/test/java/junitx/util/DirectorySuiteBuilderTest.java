@@ -13,7 +13,7 @@ import java.util.List;
 public class DirectorySuiteBuilderTest
         extends TestCase {
 
-    private final static String DIRECTORY = "build/classes-example";
+    private final static String DIRECTORY = "target/test-classes";
     
     public DirectorySuiteBuilderTest(String name) {
         super(name);
