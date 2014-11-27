@@ -54,13 +54,10 @@
 
 package junitx.framework;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.io.Reader;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 
 /**
  * A set of assert methods specially targetted to asserting files.
@@ -87,9 +84,10 @@ public class FileAssert {
      * display differences between two strings but since only lines are
      * compared (and not entire paragraphs) you can still use JUnit 3.7.
      */
-    public static void assertEquals(String message,
-                                    File expected,
-                                    File actual) {
+	public static void assertTextEquals(String message,
+									File expected,
+									File actual,
+									String charsetName) {
         Assert.assertNotNull(expected);
         Assert.assertNotNull(actual);
 
@@ -107,13 +105,13 @@ public class FileAssert {
                 eis = new FileInputStream(expected);
                 ais = new FileInputStream(actual);
     
-                BufferedReader expData = new BufferedReader(new InputStreamReader(eis));
-                BufferedReader actData = new BufferedReader(new InputStreamReader(ais));
+                BufferedReader expData = new BufferedReader(new InputStreamReader(eis, createCharsetDecoder(charsetName)));
+                BufferedReader actData = new BufferedReader(new InputStreamReader(ais, createCharsetDecoder(charsetName)));
     
                 Assert.assertNotNull(message, expData);
                 Assert.assertNotNull(message, actData);
-    
-                assertEquals(message, expData, actData);
+
+				assertTextEquals(message, expData, actData);
             } finally {
                 eis.close();
                 ais.close();
@@ -127,6 +125,39 @@ public class FileAssert {
      * Asserts that two files are equal. Throws an
      * <tt>AssertionFailedError</tt> if they are not.
      */
+    public static void assertTextEquals(File expected,
+                                    File actual,
+									String charsetName) {
+		assertTextEquals(null, expected, actual, charsetName);
+	}
+
+    /**
+     * Asserts that two files are equal. Throws an
+     * <tt>AssertionFailedError</tt> if they are not.
+     */
+    public static void assertTextEquals(File expected,
+                                    File actual) {
+		assertTextEquals(null, expected, actual, null);
+	}
+
+	/**
+	 * Asserts that two files are equal. Throws an
+	 * <tt>AssertionFailedError</tt> if they are not.<p>
+	 *
+	 * @deprecated Use {@link #assertTextEquals assertTextEquals} instead
+	 */
+	public static void assertEquals(String message,
+									File expected,
+									File actual) {
+		assertTextEquals(message, expected, actual, null);
+	}
+
+	/**
+     * Asserts that two files are equal. Throws an
+     * <tt>AssertionFailedError</tt> if they are not.
+	 *
+	 * @deprecated Use {@link #assertTextEquals assertTextEquals} instead
+     */
     public static void assertEquals(File expected,
                                     File actual) {
         assertEquals(null, expected, actual);
@@ -136,7 +167,7 @@ public class FileAssert {
      * <b>Testing only</b> Asserts that two readers are equal. Throws an
      * <tt>AssertionFailedError</tt> if they are not.
      */
-    protected static void assertEquals(String message,
+    protected static void assertTextEquals(String message,
                                        Reader expected,
                                        Reader actual) {
         Assert.assertNotNull(message, expected);
@@ -266,4 +297,10 @@ public class FileAssert {
         }
     }
 
+	private static CharsetDecoder createCharsetDecoder(String charsetName) {
+		Charset charset = (charsetName != null) ? Charset.forName(charsetName) : Charset.defaultCharset(); 
+		return charset.newDecoder()
+				.onMalformedInput(CodingErrorAction.REPORT)
+				.onUnmappableCharacter(CodingErrorAction.REPORT);
+	}
 }

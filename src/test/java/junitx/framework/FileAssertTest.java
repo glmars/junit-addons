@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.StringReader;
+import java.nio.charset.MalformedInputException;
 
 /**
  * @version $Revision: 1.7 $ $Date: 2003/05/22 02:24:15 $
@@ -27,7 +28,7 @@ public class FileAssertTest
                 "line3\n" +
                 "line4\n" +
                 "line5\n";
-        FileAssert.assertEquals(null, new StringReader(input), new StringReader(input));
+        FileAssert.assertTextEquals(null, new StringReader(input), new StringReader(input));
     }
 
     public void testFailDiffer()
@@ -43,7 +44,7 @@ public class FileAssertTest
                 "line4\n" +
                 "line5\n";
         try {
-            FileAssert.assertEquals(null, new StringReader(expected), new StringReader(actual));
+            FileAssert.assertTextEquals(null, new StringReader(expected), new StringReader(actual));
         } catch (AssertionFailedError e) {
             return;
         }
@@ -64,7 +65,7 @@ public class FileAssertTest
                 "line5\n" +
                 "line6\n";
         try {
-            FileAssert.assertEquals(null, new StringReader(expected), new StringReader(actual));
+            FileAssert.assertTextEquals(null, new StringReader(expected), new StringReader(actual));
         } catch (AssertionFailedError e) {
             return;
         }
@@ -83,7 +84,7 @@ public class FileAssertTest
                 "line3\n" +
                 "line4\n";
         try {
-            FileAssert.assertEquals(null, new StringReader(expected), new StringReader(actual));
+            FileAssert.assertTextEquals(null, new StringReader(expected), new StringReader(actual));
         } catch (AssertionFailedError e) {
             return;
         }
@@ -95,7 +96,7 @@ public class FileAssertTest
         File expected = new File(PropertyManager.getProperty("expected.file"));
         File actual = new File(PropertyManager.getProperty("normal.file"));
 
-        FileAssert.assertEquals(expected, actual);
+        FileAssert.assertTextEquals(expected, actual);
     }
 
     public void testFailFileDiffer()
@@ -104,7 +105,7 @@ public class FileAssertTest
         File actual = new File(PropertyManager.getProperty("differ.file"));
 
         try {
-            FileAssert.assertEquals(expected, actual);
+            FileAssert.assertTextEquals(expected, actual);
         } catch (AssertionFailedError e) {
             return;
         }
@@ -117,7 +118,7 @@ public class FileAssertTest
         File actual = new File(PropertyManager.getProperty("long.file"));
 
         try {
-            FileAssert.assertEquals(expected, actual);
+            FileAssert.assertTextEquals(expected, actual);
         } catch (AssertionFailedError e) {
             return;
         }
@@ -130,7 +131,7 @@ public class FileAssertTest
         File actual = new File(PropertyManager.getProperty("short.file"));
 
         try {
-            FileAssert.assertEquals(expected, actual);
+            FileAssert.assertTextEquals(expected, actual);
         } catch (AssertionFailedError e) {
             return;
         }
@@ -192,7 +193,7 @@ public class FileAssertTest
         File expected = new File(PropertyManager.getProperty("expected-lastline.file"));
         File actual = new File(PropertyManager.getProperty("expected-lastline.file"));
 
-        FileAssert.assertEquals(expected, actual);
+        FileAssert.assertTextEquals(expected, actual);
     }
 
     public void testFailFileLastLine() {
@@ -200,11 +201,36 @@ public class FileAssertTest
         File actual = new File(PropertyManager.getProperty("differ-lastline.file"));
 
         try {
-            FileAssert.assertEquals(expected, actual);
+            FileAssert.assertTextEquals(expected, actual);
         } catch (AssertionFailedError e) {
             return;
         }
         fail();
+    }
+
+    public void testFailFileMalformedInputException() {
+        File expected = new File(PropertyManager.getProperty("expected-cp866.file"));
+        File actual = new File(PropertyManager.getProperty("differ-cp866.file"));
+
+		try {
+			FileAssert.assertTextEquals(expected, actual, "UTF-8");
+		} catch (ExecutionError e) {
+			ThrowableAssert.assertSimilar(new MalformedInputException(1), e.getCause());
+			return;
+		}
+		fail();
+    }
+
+    public void testFailFileInNonDefaultEncoding() {
+        File expected = new File(PropertyManager.getProperty("expected-cp866.file"));
+        File actual = new File(PropertyManager.getProperty("differ-cp866.file"));
+
+		try {
+			FileAssert.assertTextEquals(expected, actual, "cp866");
+		} catch (AssertionFailedError e) {
+			return;
+		}
+		fail();
     }
 
     public void create()
