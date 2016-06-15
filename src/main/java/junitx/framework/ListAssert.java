@@ -87,15 +87,16 @@ public class ListAssert {
             return;
         }
 
-        for (int ii = 0; ii < expected.size(); ii++) {
-            assertContains(message, actual, expected.get(ii));
-        }
         String formatted = "[length]";
         if (message != null) {
             formatted = message + " " + formatted;
         }
 
         Assert.assertEquals(formatted, expected.size(), actual.size());
+
+        for (int ii = 0; ii < expected.size(); ii++) {
+            assertContains(message, actual, expected.get(ii));
+        }
     }
 
     /**
