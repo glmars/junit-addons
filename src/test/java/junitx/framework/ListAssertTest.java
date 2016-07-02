@@ -49,7 +49,7 @@ public class ListAssertTest extends TestCase {
         try {
             ListAssert.assertEquals(expected, actual);
         } catch (AssertionFailedError e) {
-            assertEquals("expecting <2> in <1>", e.getMessage());
+            assertEquals("[length] expected:<2> but was:<1>", e.getMessage());
             return;
         }
         fail();
