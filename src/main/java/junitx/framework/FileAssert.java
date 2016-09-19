@@ -113,8 +113,8 @@ public class FileAssert {
 
 				assertTextEquals(message, expData, actData);
             } finally {
-                eis.close();
-                ais.close();
+                if (eis != null) eis.close();
+                if (ais != null) ais.close();
             }
         } catch (IOException e) {
             throw new ExecutionError(e);
@@ -289,8 +289,8 @@ public class FileAssert {
                     return;
                 }
             } finally {
-                eis.close();
-                ais.close();
+                if (eis != null) eis.close();
+                if (ais != null) ais.close();
             }
         } catch (IOException e) {
             throw new ExecutionError(e);
